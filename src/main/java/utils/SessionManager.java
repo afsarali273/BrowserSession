@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Map;
 
 public class SessionManager {
 
@@ -81,7 +82,7 @@ public class SessionManager {
 
         JSONObject sessionObj = new JSONObject();
         sessionObj.put("username", userName);// Optional
-        sessionObj.put("createdAt", LocalDateTime.now().plusDays(2)); // Optional
+        sessionObj.put("createdAt", LocalDateTime.now()); // Optional
         sessionObj.put("session_data", getSessionData());
 
         System.out.println(" JSON Obj : " + sessionObj);
@@ -166,5 +167,33 @@ public class SessionManager {
         System.out.println(" Cookies added success !! ");
 
         driver.navigate().refresh();
+    }
+
+    public void byPassLoginUsingCookies(Map<String,String> cookies,String domain) throws InterruptedException {
+        System.out.println(" ======= Deleting all existing cookies ======== ");
+
+        driver.manage().deleteAllCookies();
+
+        cookies.keySet().forEach( k -> {
+
+           String value =  cookies.get(k);
+
+            Cookie ck =
+                    new Cookie.Builder(k, value)
+                            .path("/")
+                            .domain(domain)
+                            .expiresOn(new Date(new Date().getTime() + 3600 * 1000))
+                            .isSecure(false)
+                            .isHttpOnly(false)
+                            .build();
+            driver.manage().addCookie(ck);
+
+        });
+
+        System.out.println(" Cookies added success !! ");
+
+        driver.navigate().refresh();
+
+        Thread.sleep(10000);
     }
 }

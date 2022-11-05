@@ -8,7 +8,6 @@ import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.SessionStorage;
 import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.remote.Augmenter;
-import utils.JSONUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -179,7 +178,7 @@ public class SessionManager {
            String value =  cookies.get(k);
 
             Cookie ck =
-                    new Cookie.Builder(k, value)
+                    new Cookie.Builder(k, value) // cookies name , value
                             .path("/")
                             .domain(domain)
                             .expiresOn(new Date(new Date().getTime() + 3600 * 1000))
